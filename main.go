@@ -37,6 +37,6 @@ func handleRequest(conn net.Conn) {
 	if err != nil {
 		fmt.Println("Error reading: ", err.Error())
 	}
-	fmt.Println(buf)
+	fmt.Println(string(buf))
 	conn.Close()
 }
