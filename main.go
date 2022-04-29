@@ -32,6 +32,7 @@ func main() {
 
 func handleRequest(conn net.Conn) {
 	buf := make([]byte, 1024)
+	fmt.Println("receiving")
 	_, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println("Error reading: ", err.Error())
