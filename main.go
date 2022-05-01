@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 )
@@ -32,12 +33,26 @@ func main() {
 
 func handleRequest(conn net.Conn) {
 	buf := make([]byte, 1024)
-	fmt.Println("receiving")
-	_, err := conn.Read(buf)
+	reqLen, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println("Error reading: ", err.Error())
 	}
-	conn.Write([]byte("Message received."))
-	fmt.Println(string(buf))
+
+	file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println(err.Error())
+		file, err = os.Create("gps_log.txt")
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+	defer file.Close()
+
+	text := string(buf[:reqLen])
+	fmt.Println(text)
+	_, err = file.Write(buf[:reqLen])
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	conn.Close()
 }
