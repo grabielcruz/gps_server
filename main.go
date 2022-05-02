@@ -48,9 +48,9 @@ func handleRequest(conn net.Conn) {
 	}
 	defer file.Close()
 
-	text := string(buf[:reqLen])
+	text := string(buf[:reqLen]) + "\n"
 	fmt.Println(text)
-	_, err = file.Write(buf[:reqLen])
+	_, err = file.WriteString(text)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
