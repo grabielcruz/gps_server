@@ -58,10 +58,10 @@ func handleRequest(conn net.Conn) {
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		if reqLen == 27 {
+		if reqLen == 26 {
 			conn.Write([]byte("LOAD"))
 		}
-		if reqLen == 17 {
+		if reqLen == 16 {
 			conn.Write([]byte("ON"))
 		}
 		// conn.Close()
