@@ -32,28 +32,31 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
-	buf := make([]byte, 1024)
-	reqLen, err := conn.Read(buf)
-	if err != nil {
-		fmt.Println("Error reading: ", err.Error())
-	}
-
-	file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println(err.Error())
-		file, err = os.Create("gps_log.txt")
+	for {
+		buf := make([]byte, 1024)
+		reqLen, err := conn.Read(buf)
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println("Error reading: ", err.Error())
+			defer conn.Close()
 		}
-	}
-	defer file.Close()
 
-	text := string(buf[:reqLen]) + "\n"
-	fmt.Println(text)
-	_, err = file.WriteString(text)
-	if err != nil {
-		log.Fatal(err.Error())
+		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// 	file, err = os.Create("gps_log.txt")
+		// 	if err != nil {
+		// 		fmt.Println(err.Error())
+		// 	}
+		// }
+		// defer file.Close()
+
+		text := string(buf[:reqLen]) + "\n"
+		fmt.Println(text)
+		// _, err = file.WriteString(text)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		conn.Write([]byte("LOAD"))
+		// conn.Close()
 	}
-	conn.Write([]byte("ON"))
-	conn.Close()
 }
