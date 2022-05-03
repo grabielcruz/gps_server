@@ -38,25 +38,32 @@ func handleRequest(conn net.Conn) {
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
 			defer conn.Close()
+			break
 		}
 
-		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
-		// if err != nil {
-		// 	fmt.Println(err.Error())
-		// 	file, err = os.Create("gps_log.txt")
-		// 	if err != nil {
-		// 		fmt.Println(err.Error())
-		// 	}
-		// }
-		// defer file.Close()
+		file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Println(err.Error())
+			file, err = os.Create("gps_log.txt")
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+		}
+		defer file.Close()
 
 		text := string(buf[:reqLen]) + "\n"
 		fmt.Println(text)
+		fmt.Println(reqLen)
 		// _, err = file.WriteString(text)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		conn.Write([]byte("LOAD"))
+		if reqLen == 27 {
+			conn.Write([]byte("LOAD"))
+		}
+		if reqLen == 17 {
+			conn.Write([]byte("ON"))
+		}
 		// conn.Close()
 	}
 }
