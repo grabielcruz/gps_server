@@ -54,5 +54,6 @@ func handleRequest(conn net.Conn) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	conn.Write([]byte("LOAD"))
 	conn.Close()
 }
