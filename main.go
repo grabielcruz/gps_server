@@ -62,8 +62,8 @@ func handleRequest(conn net.Conn) {
 		if reqLen == 26 {
 			conn.Write([]byte("LOAD"))
 		} else if count%2 == 0 {
-			fmt.Println("Sending this: **,imei:864035050161315,101,10s;")
-			conn.Write([]byte("**,imei:864035050161315,101,10s;"))
+			fmt.Println("Sending this: **,imei:864035050161315,100;")
+			conn.Write([]byte("**,imei:864035050161315,100;"))
 		} else if reqLen == 16 {
 			fmt.Println("Sending ON")
 			conn.Write([]byte("ON"))
