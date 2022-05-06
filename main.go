@@ -32,6 +32,7 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
+	count := 0
 	for {
 		buf := make([]byte, 1024)
 		reqLen, err := conn.Read(buf)
@@ -61,11 +62,12 @@ func handleRequest(conn net.Conn) {
 		if reqLen == 26 {
 			conn.Write([]byte("LOAD"))
 		}
-		if reqLen == 16 {
+		if count == 3 {
 			conn.Write([]byte("**,imei:864035050161315,101,10s;"))
 		} else {
 			conn.Write([]byte("ON"))
 		}
 		// conn.Close()
+		count++
 	}
 }
