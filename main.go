@@ -62,6 +62,8 @@ func handleRequest(conn net.Conn) {
 			conn.Write([]byte("LOAD"))
 		}
 		if reqLen == 16 {
+			conn.Write([]byte("**,imei:864035050161315,101,10s;"))
+		} else {
 			conn.Write([]byte("ON"))
 		}
 		// conn.Close()
