@@ -61,13 +61,13 @@ func handleRequest(conn net.Conn) {
 		}
 		if reqLen == 26 {
 			conn.Write([]byte("LOAD"))
-		}
-		if count == 3 {
+		} else if count == 3 {
 			conn.Write([]byte("**,imei:864035050161315,101,10s;"))
-		} else {
+		} else if reqLen == 16 {
 			conn.Write([]byte("ON"))
 		}
 		// conn.Close()
 		count++
+		fmt.Println("count: ", count)
 	}
 }
