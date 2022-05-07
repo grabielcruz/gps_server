@@ -1,0 +1,11 @@
+single locating
+**,imei:864035050161315,100
+
+track upon interval
+**,imei:864035050161315,103,10s
+
+Auto track continuously
+**,imei:864035050161315,101
+
+Cancel Auto continuous track
+**,imei:864035050161315,102

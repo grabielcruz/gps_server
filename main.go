@@ -41,19 +41,19 @@ func handleRequest(conn net.Conn) {
 			break
 		}
 
-		file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
-		if err != nil {
-			fmt.Println(err.Error())
-			file, err = os.Create("gps_log.txt")
-			if err != nil {
-				fmt.Println(err.Error())
-			}
-		}
-		defer file.Close()
+		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// 	file, err = os.Create("gps_log.txt")
+		// 	if err != nil {
+		// 		fmt.Println(err.Error())
+		// 	}
+		// }
+		// defer file.Close()
 
 		text := string(buf[:reqLen]) + "\n"
 		fmt.Println(text)
-		_, err = file.WriteString(text)
+		// _, err = file.WriteString(text)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
