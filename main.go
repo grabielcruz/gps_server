@@ -32,8 +32,10 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
+	text := ""
+	buf := make([]byte, 1024)
+	reader := bufio.NewReader(os.Stdin)
 	for {
-		buf := make([]byte, 1024)
 		reqLen, err := conn.Read(buf)
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
@@ -51,13 +53,12 @@ func handleRequest(conn net.Conn) {
 		// }
 		// defer file.Close()
 
-		text := string(buf[:reqLen]) + "\n"
+		text = string(buf[:reqLen])
 		fmt.Println(text)
 		// _, err = file.WriteString(text)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		reader := bufio.NewReader(os.Stdin)
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println(err.Error())
