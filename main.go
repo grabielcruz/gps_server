@@ -62,7 +62,9 @@ func handleRequest(conn net.Conn) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		conn.Write([]byte(input))
+		if len(input) > 0 {
+			conn.Write([]byte(input))
+		}
 
 		// conn.Close()
 
