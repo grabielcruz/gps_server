@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"log"
 	"net"
 	"os"
 )
@@ -32,7 +32,6 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
-	count := 0
 	for {
 		buf := make([]byte, 1024)
 		reqLen, err := conn.Read(buf)
@@ -54,22 +53,18 @@ func handleRequest(conn net.Conn) {
 
 		text := string(buf[:reqLen]) + "\n"
 		fmt.Println(text)
-		fmt.Println(reqLen)
-		// _, err = file.WriteString(text)
+		_, err = file.WriteString(text)
 		if err != nil {
-			log.Fatal(err.Error())
+			fmt.Println(err.Error())
 		}
-		if reqLen == 26 {
-			conn.Write([]byte("LOAD"))
-		} else if count%2 == 0 {
-			fmt.Println("Sending this: **,imei:864035050161315,100;")
-			conn.Write([]byte("**,imei:864035050161315,100;"))
-		} else if reqLen == 16 {
-			fmt.Println("Sending ON")
-			conn.Write([]byte("ON"))
+		reader := bufio.NewReader(os.Stdin)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println(err.Error())
 		}
+		conn.Write([]byte(input))
+
 		// conn.Close()
-		count++
-		fmt.Println("count: ", count)
+
 	}
 }
