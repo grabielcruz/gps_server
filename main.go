@@ -14,8 +14,9 @@ const (
 	CONN_TYPE = "tcp"
 )
 
+var connections map[string]net.Conn
+
 func main() {
-	// connections := make(map[string]net.Conn)
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
 		fmt.Println("Error listening: ", err.Error())
@@ -53,11 +54,11 @@ func handleRequest(conn net.Conn) {
 		if !stored && reqLen == 26 {
 			text = string(buf[:reqLen])
 			keys := strings.Split(text, ",")
-			fmt.Println("keys: ", keys)
-			fmt.Println("keys[0]: ", keys[0])
-			fmt.Println("keys[1]: ", keys[1])
-			fmt.Println("keys[2]: ", keys[2])
-			fmt.Println("imei: ", strings.Split(keys[1], ":")[1])
+			imei := strings.Split(keys[1], ":")[1]
+			fmt.Println("imei: ", imei)
+			connections[imei] = conn
+			fmt.Println("connections: ", connections)
+			stored = true
 		}
 
 		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
