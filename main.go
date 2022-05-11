@@ -57,7 +57,7 @@ func handleRequest(conn net.Conn) {
 			fmt.Println("keys[0]: ", keys[0])
 			fmt.Println("keys[1]: ", keys[1])
 			fmt.Println("keys[2]: ", keys[2])
-			fmt.Println("imei: ", strings.Split(keys[1], ":"))
+			fmt.Println("imei: ", strings.Split(keys[1], ":")[1])
 		}
 
 		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
