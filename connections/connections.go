@@ -1,4 +1,4 @@
-package main
+package connections
 
 import (
 	"fmt"
@@ -8,18 +8,18 @@ import (
 
 var lock = &sync.Mutex{}
 
-type connectionsMap struct {
-	collection map[string]net.Conn
+type ConnectionsMap struct {
+	Collection map[string]net.Conn
 }
 
-var connections *connectionsMap
+var connections *ConnectionsMap
 
-func GetConnections() *connectionsMap {
+func GetConnections() *ConnectionsMap {
 	if connections == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		fmt.Println("Creating single instance now.")
-		connections = &connectionsMap{}
+		connections = &ConnectionsMap{}
 	} else {
 		fmt.Println("Single instance already created.")
 	}

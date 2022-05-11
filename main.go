@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"gps_server/connections"
 	"net"
 	"os"
 	"strings"
@@ -40,7 +41,7 @@ func handleRequest(conn net.Conn) {
 	var err error
 	stored := false
 	for {
-		connections := GetConnections()
+		singleConnections := connections.GetConnections()
 		reqLen, err = conn.Read(buf)
 
 		if err != nil {
@@ -55,7 +56,7 @@ func handleRequest(conn net.Conn) {
 			keys := strings.Split(text, ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
-			connections.collection[imei] = conn
+			singleConnections.Collection[imei] = conn
 			stored = true
 		}
 
@@ -83,7 +84,7 @@ func handleRequest(conn net.Conn) {
 			conn.Write([]byte(input))
 		}
 
-		fmt.Println("connections: ", connections)
+		fmt.Println("singleConnections: ", singleConnections)
 
 		// conn.Close()
 
