@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"gps_server/connections"
 	"net"
@@ -34,7 +33,7 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
-	reader := bufio.NewReader(os.Stdin)
+	// reader := bufio.NewReader(os.Stdin)
 	file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -44,6 +43,7 @@ func handleRequest(conn net.Conn) {
 		}
 	}
 	defer file.Close()
+
 	for {
 		buf := make([]byte, 1024)
 		reqLen, err := conn.Read(buf)
@@ -75,12 +75,12 @@ func handleRequest(conn net.Conn) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		if len(input) > 0 {
-			conn.Write([]byte(input))
-		}
+		// input, err := reader.ReadString('\n')
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// }
+		// if len(input) > 0 {
+		// 	conn.Write([]byte(input))
+		// }
 	}
 }
