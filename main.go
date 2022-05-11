@@ -72,10 +72,11 @@ func handleRequest(conn net.Conn) {
 
 		text = string(buf[:reqLen])
 		fmt.Println(text)
+		fmt.Println("singleConnections: ", singleConnections)
 		// _, err = file.WriteString(text)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// }
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println(err.Error())
@@ -83,8 +84,6 @@ func handleRequest(conn net.Conn) {
 		if len(input) > 0 {
 			conn.Write([]byte(input))
 		}
-
-		fmt.Println("singleConnections: ", singleConnections)
 
 		// conn.Close()
 
