@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 const (
@@ -14,6 +15,7 @@ const (
 )
 
 func main() {
+	// connections := make(map[string]net.Conn)
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
 		fmt.Println("Error listening: ", err.Error())
@@ -35,12 +37,23 @@ func handleRequest(conn net.Conn) {
 	text := ""
 	buf := make([]byte, 1024)
 	reader := bufio.NewReader(os.Stdin)
+	reqLen := 0
+	var err error
+	stored := false
 	for {
-		reqLen, err := conn.Read(buf)
+		reqLen, err = conn.Read(buf)
+
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
 			defer conn.Close()
 			break
+		}
+
+		fmt.Println("reqLen: ", reqLen)
+		if !stored && reqLen == 26 {
+			text = string(buf[:reqLen])
+			keys := strings.Split(text, ",")
+			fmt.Println("keys: ", keys)
 		}
 
 		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
