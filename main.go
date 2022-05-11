@@ -40,6 +40,7 @@ func handleRequest(conn net.Conn) {
 	var err error
 	stored := false
 	for {
+		connections := GetConnections()
 		reqLen, err = conn.Read(buf)
 
 		if err != nil {
@@ -50,7 +51,6 @@ func handleRequest(conn net.Conn) {
 
 		fmt.Println("reqLen: ", reqLen)
 		if !stored && reqLen == 26 {
-			connections := GetConnections()
 			text = string(buf[:reqLen])
 			keys := strings.Split(text, ",")
 			imei := strings.Split(keys[1], ":")[1]
