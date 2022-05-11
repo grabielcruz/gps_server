@@ -56,7 +56,7 @@ func handleRequest(conn net.Conn) {
 			keys := strings.Split(text, ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
-			singleConnections.Collection[imei] = conn
+			singleConnections.Collection[imei] = &conn
 			stored = true
 		}
 

@@ -9,7 +9,7 @@ import (
 var lock = &sync.Mutex{}
 
 type ConnectionsMap struct {
-	Collection map[string]net.Conn
+	Collection map[string]*net.Conn
 }
 
 var connections *ConnectionsMap
@@ -20,7 +20,7 @@ func GetConnections() *ConnectionsMap {
 		defer lock.Unlock()
 		fmt.Println("Creating single instance now.")
 		connections = &ConnectionsMap{}
-		connections.Collection = make(map[string]net.Conn)
+		connections.Collection = make(map[string]*net.Conn)
 	} else {
 		fmt.Println("Single instance already created.")
 	}
