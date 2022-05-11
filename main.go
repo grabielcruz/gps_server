@@ -34,15 +34,11 @@ func main() {
 }
 
 func handleRequest(conn net.Conn) {
-	text := ""
-	buf := make([]byte, 1024)
 	reader := bufio.NewReader(os.Stdin)
-	reqLen := 0
-	var err error
 	stored := false
 	for {
-		singleConnections := connections.GetConnections()
-		reqLen, err = conn.Read(buf)
+		buf := make([]byte, 1024)
+		reqLen, err := conn.Read(buf)
 
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
@@ -52,13 +48,18 @@ func handleRequest(conn net.Conn) {
 
 		fmt.Println("reqLen: ", reqLen)
 		if !stored && reqLen == 26 {
-			text = string(buf[:reqLen])
-			keys := strings.Split(text, ",")
+			singleConnections := connections.GetConnections()
+			keys := strings.Split(string(buf[:reqLen]), ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
 			singleConnections.Collection[imei] = conn
 			stored = true
 			conn.Write([]byte("LOAD"))
+			fmt.Println("singleConnections: ", singleConnections)
+		}
+
+		if reqLen == 16 {
+			conn.Write([]byte("ON"))
 		}
 
 		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
@@ -71,9 +72,7 @@ func handleRequest(conn net.Conn) {
 		// }
 		// defer file.Close()
 
-		text = string(buf[:reqLen])
-		fmt.Println(text)
-		fmt.Println("singleConnections: ", singleConnections)
+		fmt.Println(string(buf[:reqLen]))
 		// _, err = file.WriteString(text)
 		// if err != nil {
 		// 	fmt.Println(err.Error())
