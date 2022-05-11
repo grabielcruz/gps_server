@@ -20,6 +20,7 @@ func GetConnections() *ConnectionsMap {
 		defer lock.Unlock()
 		fmt.Println("Creating single instance now.")
 		connections = &ConnectionsMap{}
+		connections.Collection = make(map[string]net.Conn)
 	} else {
 		fmt.Println("Single instance already created.")
 	}
