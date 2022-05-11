@@ -14,8 +14,6 @@ const (
 	CONN_TYPE = "tcp"
 )
 
-var connections map[string]net.Conn
-
 func main() {
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
@@ -52,12 +50,12 @@ func handleRequest(conn net.Conn) {
 
 		fmt.Println("reqLen: ", reqLen)
 		if !stored && reqLen == 26 {
+			connections := GetConnections()
 			text = string(buf[:reqLen])
 			keys := strings.Split(text, ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
-			connections[imei] = conn
-			fmt.Println("connections: ", connections)
+			connections.collection[imei] = conn
 			stored = true
 		}
 
@@ -84,6 +82,8 @@ func handleRequest(conn net.Conn) {
 		if len(input) > 0 {
 			conn.Write([]byte(input))
 		}
+
+		fmt.Println("connections: ", connections)
 
 		// conn.Close()
 
