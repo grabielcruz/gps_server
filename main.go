@@ -46,8 +46,8 @@ func handleRequest(conn net.Conn) {
 
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
-			// defer conn.Close()
-			// break
+			defer conn.Close()
+			break
 		}
 
 		fmt.Println("reqLen: ", reqLen)
@@ -56,7 +56,7 @@ func handleRequest(conn net.Conn) {
 			keys := strings.Split(text, ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
-			singleConnections.Collection[imei] = &conn
+			singleConnections.Collection[imei] = conn
 			stored = true
 			conn.Write([]byte("LOAD"))
 		}
