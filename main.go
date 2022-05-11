@@ -46,8 +46,8 @@ func handleRequest(conn net.Conn) {
 
 		if err != nil {
 			fmt.Println("Error reading: ", err.Error())
-			defer conn.Close()
-			break
+			// defer conn.Close()
+			// break
 		}
 
 		fmt.Println("reqLen: ", reqLen)
@@ -58,6 +58,7 @@ func handleRequest(conn net.Conn) {
 			fmt.Println("imei: ", imei)
 			singleConnections.Collection[imei] = &conn
 			stored = true
+			conn.Write([]byte("LOAD"))
 		}
 
 		// file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
