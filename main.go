@@ -35,7 +35,6 @@ func main() {
 
 func handleRequest(conn net.Conn) {
 	reader := bufio.NewReader(os.Stdin)
-	stored := false
 	for {
 		buf := make([]byte, 1024)
 		reqLen, err := conn.Read(buf)
@@ -47,13 +46,12 @@ func handleRequest(conn net.Conn) {
 		}
 
 		fmt.Println("reqLen: ", reqLen)
-		if !stored && reqLen == 26 {
+		if reqLen == 26 {
 			singleConnections := connections.GetConnections()
 			keys := strings.Split(string(buf[:reqLen]), ",")
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
 			singleConnections.Collection[imei] = conn
-			stored = true
 			conn.Write([]byte("LOAD"))
 			fmt.Println("singleConnections: ", singleConnections)
 		}
@@ -84,8 +82,5 @@ func handleRequest(conn net.Conn) {
 		if len(input) > 0 {
 			conn.Write([]byte(input))
 		}
-
-		// conn.Close()
-
 	}
 }
