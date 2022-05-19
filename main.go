@@ -21,10 +21,15 @@ func main() {
 	go listenTCP()
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+	r.POST("/gps/:imei/*action", func(c *gin.Context) {
+		imei := c.Param("imei")
+		action := c.Param("action")
+		fmt.Println("Receiving imei ", imei, " and action ", action)
+		singleConnections := connections.GetConnections()
+		conn := singleConnections.Collection[imei]
+		fmt.Println("connection found: ", conn)
+		fmt.Println("Sending to connection ", action)
+		conn.Write([]byte(action))
 	})
 	r.Run(":8080")
 }
