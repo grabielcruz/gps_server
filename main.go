@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gps_server/connections"
 	"net"
+	"net/http"
 	"os"
 	"strings"
 
@@ -29,6 +30,7 @@ func main() {
 		fmt.Println("connection found: ", conn)
 		fmt.Println("Sending to connection ", action)
 		conn.Write([]byte(action))
+		c.String(http.StatusOK, "command", action, " received fro imei ", imei)
 	})
 	r.Run(":8080")
 }
