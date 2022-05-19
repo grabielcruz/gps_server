@@ -7,6 +7,8 @@ import (
 	"net"
 	"os"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -16,6 +18,18 @@ const (
 )
 
 func main() {
+	go listenTCP()
+
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.Run(":8080")
+}
+
+func listenTCP() {
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
 		fmt.Println("Error listening: ", err.Error())
