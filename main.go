@@ -24,10 +24,8 @@ func main() {
 	r.POST("/gps/:imei/*action", func(c *gin.Context) {
 		imei := c.Param("imei")
 		action := c.Param("action")
-		fmt.Println("Receiving imei ", imei, " and action ", action)
 		singleConnections := connections.GetConnections()
 		conn := singleConnections.Collection[imei]
-		fmt.Println("connection found: ", conn)
 		fmt.Println("Sending to connection ", action)
 		conn.Write([]byte(action))
 		c.String(http.StatusOK, "command", action, " received fro imei ", imei)
