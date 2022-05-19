@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"gps_server/connections"
 	"net"
@@ -53,7 +52,7 @@ func listenTCP() {
 }
 
 func handleRequest(conn net.Conn) {
-	reader := bufio.NewReader(os.Stdin)
+	// reader := bufio.NewReader(os.Stdin)
 	file, err := os.OpenFile("gps_log.txt", os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -82,25 +81,25 @@ func handleRequest(conn net.Conn) {
 			imei := strings.Split(keys[1], ":")[1]
 			fmt.Println("imei: ", imei)
 			singleConnections.Collection[imei] = conn
-			conn.Write([]byte("LOAD"))
+			// conn.Write([]byte("LOAD"))
 			fmt.Println("singleConnections: ", singleConnections)
 		}
 
-		if reqLen == 16 {
-			conn.Write([]byte("ON"))
-		}
+		// if reqLen == 16 {
+		// 	conn.Write([]byte("ON"))
+		// }
 
 		fmt.Println(text)
 		_, err = file.WriteString(text)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		if len(input) > 0 {
-			conn.Write([]byte(input))
-		}
+		// input, err := reader.ReadString('\n')
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// }
+		// if len(input) > 0 {
+		// 	conn.Write([]byte(input))
+		// }
 	}
 }
