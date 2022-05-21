@@ -1,0 +1,9 @@
+POST http://localhost:8080/gps_load/864035050161315
+###
+POST http://localhost:8080/gps_on/864035050161315
+###
+POST http://localhost:8080/gps_command/864035050161315?keyword=100
+###
+POST http://localhost:8080/gps_command/864035050161315?keyword=103&&value=10s
+
+

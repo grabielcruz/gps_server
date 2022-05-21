@@ -21,14 +21,49 @@ func main() {
 	go listenTCP()
 
 	r := gin.Default()
-	r.POST("/gps/:imei/*action", func(c *gin.Context) {
+	r.POST("/gps_load/:imei", func(c *gin.Context) {
 		imei := c.Param("imei")
-		action := c.Param("action")
 		singleConnections := connections.GetConnections()
 		conn := singleConnections.Collection[imei]
-		fmt.Println("Sending to connection ", action)
-		conn.Write([]byte(action))
-		c.String(http.StatusOK, "command", action, " received fro imei ", imei)
+		if conn == nil {
+			c.String(http.StatusNotFound, "imei no encontrado")
+			return
+		}
+		fmt.Println("Sending to LOAD")
+		conn.Write([]byte("LOAD"))
+		c.String(http.StatusOK, "command LOAD sent to imei ", imei)
+	})
+
+	r.POST("/gps_on/:imei", func(c *gin.Context) {
+		imei := c.Param("imei")
+		singleConnections := connections.GetConnections()
+		conn := singleConnections.Collection[imei]
+		if conn == nil {
+			c.String(http.StatusNotFound, "imei no encontrado")
+			return
+		}
+		fmt.Println("Sending to ON")
+		conn.Write([]byte("ON"))
+		c.String(http.StatusOK, "command ON sent to imei ", imei)
+	})
+
+	r.POST("/gps_command/:imei", func(c *gin.Context) {
+		imei := c.Param("imei")
+		keyword := c.Query("keyword")
+		value := c.Query("value")
+		command := fmt.Sprintf("**,imei:%s,%s", imei, keyword)
+		if len(value) > 0 {
+			command += "," + value
+		}
+		fmt.Println("Command: ", command)
+		singleConnections := connections.GetConnections()
+		conn := singleConnections.Collection[imei]
+		if conn == nil {
+			c.String(http.StatusNotFound, "imei no encontrado")
+			return
+		}
+		conn.Write([]byte(command))
+		c.String(http.StatusOK, "sending command ", command)
 	})
 	r.Run(":8080")
 }
